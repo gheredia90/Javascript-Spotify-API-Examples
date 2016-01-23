@@ -1,11 +1,11 @@
-var API_URL = 'https://api.spotify.com/v1/search?type=artist&query=';
 var API_BASE_URL = 'https://api.spotify.com'
 
 $('.form-horizontal').on('submit', function(event){
 	event.preventDefault();
 
 	var data = $('.form-control.inputArtistText').val();
-	var search_url = API_URL + data;
+	var search_url = API_BASE_URL + '/v1/search?type=artist&query='
+	+ data;
 
 	$.ajax({
         type: "GET",
@@ -84,7 +84,42 @@ function showAlbums (response) {
 
 function addAlbum(album){
 	var name = album.name;
-	$('.album-list').append('<li class="list-group-item">'
-		+ name	
-	+ '</li>');		
+	$('.album-list').append('<li class="list-album-item" id="'
+	+ album.id + '"' + '>'
+	+ name + '</li>');		
 }
+
+$( "body" ).on( "click", ".list-album-item", function() {
+    
+	var id = $(this).attr('id');
+	var tracks_url = API_BASE_URL + "/v1/albums/"
+	+ id + "/tracks";
+
+	$.ajax({
+	    type: "GET",
+	    url: tracks_url,
+	    data: '',
+	    success: showTracks,
+	    error: handleError,
+	    dataType: "json"
+	});
+});	
+
+function showTracks (response) {
+    var tracks =  response.items;
+    $('.tracklist').empty();
+
+    tracks.forEach(function(track, index){
+    	addTrack(track);
+    });
+    $("#tracksModal").modal();
+}
+
+function addTrack(track){
+	var name = track.name;
+	$('.tracklist').append('<li class="list-track-item" id="'
+	+ track.id + '"' + '>'
+	+ name + '</li>');		
+}
+
+
