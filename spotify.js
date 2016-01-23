@@ -4,12 +4,12 @@ $('.form-horizontal').on('submit', function(event){
 	event.preventDefault();
 
 	var data = $('.form-control.inputArtistText').val();
-	var search_url = API_BASE_URL + '/v1/search?type=artist&query='
+	var searchUrl = API_BASE_URL + '/v1/search?type=artist&query='
 	+ data;
 
 	$.ajax({
         type: "GET",
-        url: search_url,
+        url: searchUrl,
         data: '',
         success: showSearchResults,
         error: handleError,
@@ -59,12 +59,12 @@ function addArtist(artist, index){
 $( "body" ).on( "click", "p", function() {
     
 	var id = $(this).attr('id');
-	var albums_url = API_BASE_URL + "/v1/artists/"
+	var albumsUrl = API_BASE_URL + "/v1/artists/"
 	+ id + "/albums";
 
 	$.ajax({
 	    type: "GET",
-	    url: albums_url,
+	    url: albumsUrl,
 	    data: '',
 	    success: showAlbums,
 	    error: handleError,
@@ -92,12 +92,12 @@ function addAlbum(album){
 $( "body" ).on( "click", ".list-album-item", function() {
     
 	var id = $(this).attr('id');
-	var tracks_url = API_BASE_URL + "/v1/albums/"
+	var tracksUrl = API_BASE_URL + "/v1/albums/"
 	+ id + "/tracks";
 
 	$.ajax({
 	    type: "GET",
-	    url: tracks_url,
+	    url: tracksUrl,
 	    data: '',
 	    success: showTracks,
 	    error: handleError,
@@ -108,6 +108,7 @@ $( "body" ).on( "click", ".list-album-item", function() {
 function showTracks (response) {
     var tracks =  response.items;
     $('.tracklist').empty();
+    $
 
     tracks.forEach(function(track, index){
     	addTrack(track);
@@ -117,9 +118,12 @@ function showTracks (response) {
 
 function addTrack(track){
 	var name = track.name;
+	var trackUrl = track.preview_url;
 	$('.tracklist').append('<li class="list-track-item" id="'
 	+ track.id + '"' + '>'
-	+ name + '</li>');		
+	+ '<a href="' + trackUrl 
+	+ 'target="blank"' + '>'	
+	+ name + '</a>' + '</li>');		
 }
 
 
